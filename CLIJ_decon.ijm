@@ -71,7 +71,7 @@ merge_string = merge_string + "c"+i+"=[CLIJx_Decon_"+image+"] ";
 run("Merge Channels...", merge_string+"create");
 rename("Decon_"+image_stack);
 getDateAndTime(year, month, dayOfWeek, dayOfMonth, hour, minute, second, msec);
-print("Deconvolved with CLIJx_imageJ2RichardsonLucyDeconvolution on "+year+"-"+month+1+"-"+dayOfMonth"
+print("Deconvolved with CLIJx_imageJ2RichardsonLucyDeconvolution on "+year+"-"+month+1+"-"+dayOfMonth);
 //Further processing steps
 
 
