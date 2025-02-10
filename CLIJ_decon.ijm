@@ -7,7 +7,8 @@
 //Designed to work with OMERO batch process plugin: https://github.com/GReD-Clermont/omero_batch-plugin?tab=readme-ov-file
 
 //Define inputs: path to psf file and number of iterations of Richardson-Lucy Deconvolution
-#@ File (label = "Select PSF file:", style = "file") psf_path
+#@ String (visibility=MESSAGE, value="<html>Select PSF file in order for each channel you want to deconvolve.</html>", required=false) msg
+#@ File[] (label="Select PSF files", style="files") psf_paths
 #@ Integer (label = "Iterations:", min=0, max=5000, value=10) num_iterations
 
 // Init GPU
@@ -24,15 +25,7 @@ image_stack = getTitle();
 Stack.getDimensions(width, height, image_channels, slices, frames);
 run("Split Channels");
 
-// Load psf
-open(psf_path);
-psf_stack = getTitle();
-print("PSF: "+psf_stack);
-print("Number of iterations: "+num_iterations);
-Stack.getDimensions(width, height, psf_channels, slices, frames);
-run("Split Channels");
-
-if (psf_channels != image_channels){
+if (lengthOf(psf_paths) != image_channels){
 	exit("Number of channels in image and psf are different");
 }
 
@@ -44,7 +37,11 @@ image="C"+i+"-"+image_stack;
 selectWindow(image);
 //Get current LUT of channel
 getLut(reds, greens, blues);
-psf="C"+i+"-"+psf_stack;
+psf_path=psf_paths[i-1];
+open(psf_path);
+psf = getTitle();
+print("PSF: "+psf);
+print("Number of iterations: "+num_iterations);
 time=getTime();
 Ext.CLIJ2_push(image);
 Ext.CLIJ2_push(psf);
