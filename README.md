@@ -13,14 +13,14 @@ Requires PSF image file with same number of channels as the image to be deconvol
 ## Usage Instructions
 To run on a single local image (can be useful for testing input arguments):
 1. Open the image and the macro in Fiji.
-2. Click run on the macro. You will be asked for a PSF file and the number of iterations to run the algorithm.
+2. Click run on the macro. You will be asked for PSF files - you will need one for each channel and they need to be entered in the order of the channels. You will also need to enter the number of iterations to run the algorithm and optionally you can choose to save the results after x interations. If you just want the final result set this to 0.
 3. After processing the deconvolved image will show
 
 To run with the OMERO batch plugin: 
 1. Open the OMERO batch plugin (Plugins > OMERO > Batch process...)
 2. Select if your data is local on OMERO.
 3. Select your input data.
-4. Select the macro (CLIJ_decon.ijm) and click set arguments. A dialog box will appear and you can select your PSF file and how many iterations you wish to run.
+4. Select the macro (CLIJ_decon.ijm) and click set arguments. A dialog box will appear and you can select your PSF files and how many iterations as above.
 5. The macro returns new image and a log file, tick these two boxes.
 6. Choose a suffix for your files if you wish (the macro prefix the file names with "Decon")
 7. Choose whether to save the files locally or on to OMERO and where you want to save them
