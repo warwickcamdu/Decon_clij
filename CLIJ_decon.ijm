@@ -10,6 +10,9 @@
 #@ String (visibility=MESSAGE, value="<html>Select PSF file in order for each channel you want to deconvolve.</html>", required=false) msg
 #@ File[] (label="Select PSF files", style="files") psf_paths
 #@ Integer (label = "Iterations:", min=0, max=5000, value=10) num_iterations
+#@ Integer (label = "Save output every x iterations, x:", min=0, max=50, value=1) out_iter
+#@ String (visibility=MESSAGE, value="<html>To only output final result set x to 0.</html>", required=false) msg
+
 
 // Init GPU
 run("CLIJ2 Macro Extensions", "cl_device=");
@@ -28,6 +31,7 @@ run("Split Channels");
 if (lengthOf(psf_paths) != image_channels){
 	exit("Number of channels in image and psf are different");
 }
+
 
 //Initialise string for merging channels
 merge_string="";
@@ -49,7 +53,23 @@ print("Pushing image and psf took " + (getTime() - time) + " msec");
 
 // Richardson Lucy Deconvolution
 time = getTime();
-Ext.CLIJx_imageJ2RichardsonLucyDeconvolution(image, psf, output_image, num_iterations);
+if (out_iter == 0) {
+	out_iter = num_iterations;
+}
+num_decon=floor(num_iterations/out_iter);
+extra_iterations=num_iterations-(out_iter*num_decon);
+for (j = 1; j <= num_decon; j++){
+	Ext.CLIJx_imageJ2RichardsonLucyDeconvolution(image, psf, output_image, out_iter);
+	Ext.CLIJ2_release(image);
+	close(image);
+	image=Ext.CLIJ2_pull(output_image);
+	//run("Duplicate...", "title=CLIJx_Decon_iter"+(out_iter*j)+"_C"+i+"_"+image_stack+" duplicate");
+	rename("CLIJx_Decon_iter"+(out_iter*j)+"_C"+i+"_"+image_stack);
+	Ext.CLIJ2_push(image);
+}
+if (extra_iterations > 0) {
+	Ext.CLIJx_imageJ2RichardsonLucyDeconvolution(image, psf, output_image, extra_iterations);
+}
 print("Deconvolution took " + (getTime() - time) + " msec");
 Ext.CLIJ2_release(image);
 close(image);
@@ -58,10 +78,10 @@ close(psf);
 Ext.CLIJ2_pull(output_image);
 Ext.CLIJ2_release(output_image);
 
-rename("CLIJx_Decon_"+image);
+rename("CLIJx_Decon_C"+i+"-"+image_stack);
 //Apply LUT from original image
 setLut(reds, greens, blues);
-merge_string = merge_string + "c"+i+"=[CLIJx_Decon_"+image+"] ";
+merge_string = merge_string + "c"+i+"=[CLIJx_Decon_C"+i+"-"+image_stack+"] ";
 }
 
 //Merge deconvolved channels back together
