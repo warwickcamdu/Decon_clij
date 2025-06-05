@@ -3,7 +3,7 @@
 ImageJ Macro to deconvolve data using CLIJ Richardson Lucy implementation. 
 
 ## Requirements
-Install CLIJ in Fiji: https://clij.github.io/clij-docs/installationInFiji.html
+Install CLIJ2 and optional extensions in Fiji: [https://clij.github.io/clij-docs/installationInFiji.html](https://clij.github.io/assistant/installation)
 
 Install OMERO batch plugin (optional, needed for batch processing): https://github.com/GReD-Clermont/omero_batch-plugin?tab=readme-ov-file 
 
