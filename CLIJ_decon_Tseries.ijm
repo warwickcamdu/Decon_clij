@@ -12,7 +12,6 @@
 #@ Integer (label = "Iterations:", min=0, max=5000, value=10) num_iterations
 #@ Integer (label = "Save output every x iterations, x:", min=0, max=50, value=1) out_iter
 #@ String (visibility=MESSAGE, value="<html>To only output final result set x to 0.</html>", required=false) msg
-#@ String (choices={"3i","Zeiss"}, style="listBox") scope
 
 total_time=getTime();
 // Init GPU
