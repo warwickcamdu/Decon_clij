@@ -1,5 +1,6 @@
 //Haase, R., Royer, L.A., Steinbach, P. et al. CLIJ: GPU-accelerated image processing for everyone. Nat Methods 17, 5–6 (2020). https://doi.org/10.1038/s41592-019-0650-
 #@ String (choices={"3i","Zeiss"}, style="listBox") scope
+#@ Boolean (label="Rotate/coverslip correct") rotate
 
 total_time=getTime();
 getVoxelSize(dx, dy, dz_stage, unit);
@@ -43,6 +44,9 @@ for (frame = 1; frame <= frames; frame++) {
 		if (scope == "3i") {
 			image2 = title+"_shearXZ";
 			transform = "shearXZ="+-deskewfactor;
+			if (rotate){
+				transform = transform + " rotateY="+angle;
+			}
 		}
 		if (scope == "Zeiss") {
 			image2 = title+"_shearYZ";

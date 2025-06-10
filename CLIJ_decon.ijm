@@ -26,7 +26,12 @@ print("OpenCL version: " + opencl_version);
 // Load image
 image_stack = getTitle();
 Stack.getDimensions(width, height, image_channels, slices, frames);
-run("Split Channels");
+if (image_channels > 1){
+	run("Split Channels");
+} else {
+	selectWindow(image_stack);
+	rename("C1-"+image_stack);
+}
 
 if (lengthOf(psf_paths) != image_channels){
 	exit("Number of channels in image and psf are different");

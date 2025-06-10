@@ -113,9 +113,11 @@ Ext.CLIJ2_release(psfs[i]);
 close(psfs[i]);
 }
 
-concat_string=concat_string + " image"+frames+1+"=[-- None --]";
-run("Concatenate...", concat_string);
-run("Stack to Hyperstack...", "order=xyczt(default) channels="+image_channels+" slices="+slices+" frames="+frames+" display=Color");
-Stack.setDisplayMode(mode);
+if (frames > 1) {
+	concat_string=concat_string + " image"+frames+1+"=[-- None --]";
+	run("Concatenate...", concat_string);
+	run("Stack to Hyperstack...", "order=xyczt(default) channels="+image_channels+" slices="+slices+" frames="+frames+" display=Color");
+	Stack.setDisplayMode(mode);
+}
 setVoxelSize(dx, dy, dz_stage, unit);
 print("Decon total time " + (getTime() - total_time) + " msec");
