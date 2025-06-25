@@ -64,7 +64,7 @@ if (out_iter == 0) {
 num_decon=floor(num_iterations/out_iter);
 extra_iterations=num_iterations-(out_iter*num_decon);
 for (j = 1; j <= num_decon; j++){
-	Ext.CLIJx_imageJ2RichardsonLucyDeconvolution(image, psf, output_image, out_iter);
+	Ext.CLIJx_deconvolveRichardsonLucyFFT(image, psf, output_image, out_iter);
 	Ext.CLIJ2_release(image);
 	close(image);
 	image=Ext.CLIJ2_pull(output_image);
@@ -73,7 +73,7 @@ for (j = 1; j <= num_decon; j++){
 	Ext.CLIJ2_push(image);
 }
 if (extra_iterations > 0) {
-	Ext.CLIJx_imageJ2RichardsonLucyDeconvolution(image, psf, output_image, extra_iterations);
+	Ext.CLIJx_deconvolveRichardsonLucyFFT(image, psf, output_image, extra_iterations);
 }
 print("Deconvolution took " + (getTime() - time) + " msec");
 Ext.CLIJ2_release(image);

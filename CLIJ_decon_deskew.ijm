@@ -80,20 +80,20 @@ extra_iterations=num_iterations-(out_iter*num_decon);
 image=image_stack;
 
 for (j = 1; j <= num_decon; j++){
-	Ext.CLIJx_imageJ2RichardsonLucyDeconvolution(image, psfs[i-1], output_image, out_iter);
-	//Ext.CLIJ2_release(image);
-	//close(image);
+	Ext.CLIJx_deconvolveRichardsonLucyFFT(image, psfs[i-1], output_image, out_iter);
+	Ext.CLIJ2_release(image);
+
 	image=Ext.CLIJ2_pull(output_image);
 	//run("Duplicate...", "title=CLIJx_Decon_iter"+(out_iter*j)+"_C"+i+"_"+image_stack+" duplicate");
-	rename("CLIJx_Decon_iter"+(out_iter*j)+"_C"+i+"_T"+frame+"_"+image_stack);
+	rename("CLIJx_Decon_iter"+(out_iter*j)+"_C"+i+"_"+image_stack);
 	Ext.CLIJ2_push(image);
 }
 if (extra_iterations > 0) {
-	Ext.CLIJx_imageJ2RichardsonLucyDeconvolution(image, psfs[i-1], output_image, extra_iterations);
+	Ext.CLIJx_deconvolveRichardsonLucyFFT(image, psf, output_image, extra_iterations);
 }
 print("Deconvolution took " + (getTime() - time) + " msec");
 Ext.CLIJ2_release(image);
-//close(image);
+//close(image)
 
 Ext.CLIJ2_pull(output_image);
 Ext.CLIJ2_release(output_image);
@@ -111,7 +111,7 @@ run("Merge Channels...", merge_string+"create");
 rename("Decon_T"+frame+"_"+image_stack);
 getDateAndTime(year, month, dayOfWeek, dayOfMonth, hour, minute, second, msec);
 print("Deconvolved with CLIJx_imageJ2RichardsonLucyDeconvolution on "+year+"-"+month+1+"-"+dayOfMonth);
-concat_string=concat_string + " image"+frame+"=Decon_T"+frame+"_"+image_stack;
+concat_string=concat_string + " image"+frame+"=[Decon_T"+frame+"_"+image_stack+"]";
 }
 
 for (i = 0; i < lengthOf(psfs); i++) {
